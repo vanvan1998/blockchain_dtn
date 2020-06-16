@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, Link } from "react-router-dom";
 import Routes from './Routes';
 import {
   Grid,
@@ -226,18 +226,31 @@ class App extends React.Component {
         </Button>
           </DialogActions>
         </Dialog>
-        <Grid container direction='row'>
-        <Grid item xs={2} container direction='column'>
-          <Button>Home</Button>
-          <Button>Home</Button>
-          <Button>Home</Button>
-        </Grid>
-        <Grid item xs={10}>
-          <BrowserRouter>
-            <Routes />
-          </BrowserRouter>
-        </Grid>
-      </Grid>
+
+        <BrowserRouter>
+          <Grid container direction="row" justify="space-around" alignItems="flex-start">
+            <Grid item xs={3} container direction='column' style={{ marginTop: '1%' }}>
+              <Link to="/" style={{ textDecoration: 'none' }}>
+                <Button variant="container" style={{ width: '40%', fontWeight: 'bold' }}>
+                  HOME
+                </Button>
+              </Link>
+              <Link to={'/a/block'} style={{ textDecoration: 'none' }}>
+                <Button variant="container" style={{ width: '40%', fontWeight: 'bold' }}>
+                  BLOCK
+                </Button>
+              </Link>
+              <Link to={'/a/mine'} style={{ textDecoration: 'none' }}>
+                <Button variant="container" style={{ width: '40%', fontWeight: 'bold' }}>
+                  MINE
+                </Button>
+              </Link>
+            </Grid>
+            <Grid item xs={8}>
+              <Routes />
+            </Grid>
+          </Grid>
+        </BrowserRouter>
 
       </>
     )
