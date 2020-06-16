@@ -7,14 +7,11 @@ import {
     Typography,
     ExpansionPanelDetails,
     Button,
-    AppBar,
-    Toolbar,
     Dialog,
     DialogActions,
     DialogContent,
     DialogContentText,
     DialogTitle,
-    TextField,
     InputBase
 } from '@material-ui/core';
 import { ExpandMore } from '@material-ui/icons';
@@ -22,10 +19,8 @@ import MonetizationOnTwoToneIcon from '@material-ui/icons/MonetizationOnTwoTone'
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import Data from '../js/data.json';
 import User from '../js/user.json';
-import { ec as EC } from 'elliptic';
 import { reactLocalStorage } from 'reactjs-localstorage';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import SearchIcon from '@material-ui/icons/Search';
 
 const { Blockchain } = require('../../src/js/blockchain');
 const key = '04729aaee497f99ff7ed4da9b7a5c23912da6533783b5cee16839b1e2628bc3413672b407a68c7a15a6fe3ea238b16f26e7a35755e258a0b9fb3d007da7a2e9c94';
@@ -257,31 +252,6 @@ class Home extends React.Component {
     render() {
         return (
             <>
-                <AppBar position="static" style={{ flexGrow: 1, backgroundColor: "#43a047" }}>
-                    <Toolbar>
-                        <Typography variant="h6" style={{ flexGrow: 1 }}>
-                            BLOCK CHAIN
-            </Typography>
-                        <Grid style={{ flexGrow: 1, width: "40%" }} spacing={1} alignItems="flex-end">
-                            <Grid container direction={'row'}>
-                                <Grid item xs={10}>
-                                    <TextField fullWidth={true} id="input-with-icon-grid" InputProps={{
-                                        style: {
-                                            color: "white",
-                                        }
-                                    }}
-                                        placeholder="Search transactions of address"
-                                        onChange={(event) => { this.setState({ searchText: event.target.value }) }} />
-                                </Grid>
-                                <Grid item >
-                                    <Button onClick={() => { this.getTransHisUser(this.state.searchText) }}>
-                                        <SearchIcon style={{ color: "white" }} />
-                                    </Button>
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                    </Toolbar>
-                </AppBar>
                 <Grid container direction="row" justify="center"
                     alignItems="flex-start" style={{ padding: "1% 2%" }}>
                     <Grid item container direction="column" alignItems="center" style={{ height: "100%", width: "90%", padding: "1.5% 2.5%", margin: "auto" }}>
