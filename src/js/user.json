@@ -1,0 +1,12 @@
+[
+    {
+        "name":"Wallet1",
+        "privateKey": "7c4c45907dec40c91bab3480c39032e90049f1a44f3e18c3e07c23e3273995cf",
+        "publicKey": "04729aaee497f99ff7ed4da9b7a5c23912da6533783b5cee16839b1e2628bc3413672b407a68c7a15a6fe3ea238b16f26e7a35755e258a0b9fb3d007da7a2e9c94"
+    },
+    {
+        "name":"Wallet2",
+        "privateKey": "854de2a5ab09aa1ed51fd878a917c9778f606ca010effb7bc488c643744b9a38",
+        "publicKey": "0481758cb017885d884d1a8eb309c82e2644bc1776a0244b000adef2bb05755e8bbca68905b1387cf2e97b044a4287befa9400c1bd6c2ee6bf1241341ab4338f7a"
+    }
+]
