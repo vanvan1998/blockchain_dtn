@@ -15,7 +15,7 @@ import {
   DialogContentText,
   DialogTitle,
   List,
-  ListItemIcon, ListItemText, ListItem
+  ListItem
 } from '@material-ui/core';
 import MonetizationOnTwoToneIcon from '@material-ui/icons/MonetizationOnTwoTone';
 import Data from './js/data.json';
@@ -182,21 +182,24 @@ class App extends React.Component {
   render() {
     return (
       <>
-        <AppBar style={{ flexGrow: 1, backgroundColor: "#43a047" }}>
+        <AppBar style={{ flexGrow: 1, background: "#d4145a" }}>
           <Toolbar>
-            <Typography variant="h6" style={{ flexGrow: 1 }}>
-              BLOCK CHAIN
+            <Typography variant="h6" style={{ flexGrow: 1, color: "#fff", fontWeight: 'bold' }}>
+              VOTING
             </Typography>
-            <Grid style={{ flexGrow: 1, width: "40%" }} spacing={1} alignItems="flex-end">
-              <Grid container direction={'row'}>
-                <Grid item xs={10}>
-                  <TextField fullWidth={true} id="input-with-icon-grid" InputProps={{
+            <Grid style={{ flexGrow: 1 }} spacing={1} >
+              <Grid container direction={'row'} justify="flex-end">
+                <Grid item >
+                  <TextField id="input-with-icon-grid" InputProps={{
                     style: {
-                      color: "white",
+                      color: "#fff",
+                      borderBottom: '2px solid #fff',
+                      width: 300,
                     },
-                    
-                  }}
-                    placeholder="Search transactions of address"
+                    disableUnderline: true
+                  }
+                  }
+                    placeholder="Search transactions"
                     onChange={(event) => { this.setState({ searchText: event.target.value }) }} />
                 </Grid>
                 <Grid item >
@@ -233,35 +236,37 @@ class App extends React.Component {
         </Dialog>
 
         <BrowserRouter>
-          <Grid container direction="row" justify="space-around" alignItems="flex-start" style={{marginTop:'4%'}}>
-            <Grid item xs={3} >
-              <div style={{ borderRight: '2px solid #dfe3e8', height: '100%', display: 'flex', flexDirection: 'column', position: 'fixed' }}>
+          <Grid container direction="row" justify="center" alignItems="flex-start" style={{ marginTop: '4%' }}>
+            <Grid item xs={2}>
+              <Grid container direction="column" justify="flex-start" alignItems="flex-start" style={{ borderRight: '2px solid #dfe3e8', height: window.innerHeight * 0.91 }}>
                 <List>
                   <ListItem>
                     <Link to="/" style={{ textDecoration: 'none' }}>
-                      <Button variant="container" startIcon={<HomeIcon style={{ marginRight: 10 }} />} style={{ width: '100%', fontWeight: 'bold', fontSize: 20, textAlign: 'left' }}>
+                      <Button variant="container" startIcon={<HomeIcon style={{ color: "#d4145a" }} />} style={{ width: 230, fontWeight: 'bold', fontSize: 15, marginTop: '10%' }}>
                         HOME
                 </Button>
                     </Link>
                   </ListItem>
                   <ListItem>
                     <Link to={'/a/block'} style={{ textDecoration: 'none', }}>
-                      <Button variant="container" startIcon={<ViewListIcon style={{ marginRight: 10 }} />} style={{ width: '100%', fontWeight: 'bold', fontSize: 20, textAlign: 'left' }}>
+                      <Button variant="container" startIcon={<ViewListIcon style={{ color: "#d4145a" }} />} style={{ width: 230, fontWeight: 'bold', fontSize: 15, textAlign: 'left' }}>
                         BLOCK
                 </Button>
                     </Link>
                   </ListItem>
                   <ListItem>
                     <Link to={'/a/mine'} style={{ textDecoration: 'none' }}>
-                      <Button variant="container" startIcon={<BuildIcon style={{ marginRight: 10 }} />} style={{ width: '100%', fontWeight: 'bold', fontSize: 20, textAlign: 'left' }}>
+                      <Button variant="container" startIcon={<BuildIcon style={{ color: "#d4145a" }} />} style={{ width: 230, fontWeight: 'bold', fontSize: 15, textAlign: 'left' }}>
                         MINE
                 </Button>
                     </Link>
                   </ListItem>
                 </List>
-              </div>
+
+
+              </Grid>
             </Grid>
-            <Grid item xs={8} >
+            <Grid item xs={10} >
               <Routes />
             </Grid>
           </Grid>

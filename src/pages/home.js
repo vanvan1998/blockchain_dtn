@@ -2,29 +2,28 @@ import React from 'react';
 import '../App.css';
 import {
     Grid,
-    ExpansionPanel,
-    ExpansionPanelSummary,
     Typography,
-    ExpansionPanelDetails,
+    Card,
+    CardContent,
+    CardActions,
     Button,
     Dialog,
     DialogActions,
     DialogContent,
     DialogContentText,
     DialogTitle,
-    TextField,
-    InputBase
+    InputBase,
+    Paper,
 } from '@material-ui/core';
-import { ExpandMore } from '@material-ui/icons';
 import MonetizationOnTwoToneIcon from '@material-ui/icons/MonetizationOnTwoTone';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import AddIcon from '@material-ui/icons/Add';
 import Data from '../js/data.json';
 import User from '../js/user.json';
 import { ec as EC } from 'elliptic';
 import { reactLocalStorage } from 'reactjs-localstorage';
 import LinearProgress from '@material-ui/core/LinearProgress';
-
+import Ballot from '../assets/ballot.png';
+import Avatar from '../assets/avatar-sample.jpg'
 const { Blockchain, Transaction } = require('../../src/js/blockchain');
 // const EC = require('elliptic').ec;
 const ec = new EC('secp256k1');
@@ -117,14 +116,14 @@ class Home extends React.Component {
         });
     };
 
-  getTransHisUser = (publicKey) => {
-    const trans = this.state.MyCoin.getTransOfAddress(publicKey);
-    this.setState({
-      transHis: trans,
-      IsOpenTransHis: true,
-      searchText: publicKey
-    })
-  }
+    getTransHisUser = (publicKey) => {
+        const trans = this.state.MyCoin.getTransOfAddress(publicKey);
+        this.setState({
+            transHis: trans,
+            IsOpenTransHis: true,
+            searchText: publicKey
+        })
+    }
 
     handleClickOpenAdd = (publicKey, privateKey) => {
         this.setState({
@@ -244,112 +243,75 @@ class Home extends React.Component {
 
     renderSendCoin() {
         return (
-            <Grid container direction="column" style={{ paddingRight: "1%", paddingLeft: "1%", height: "25%", width: "94%", marginLeft: "3%", marginRight: "3%", marginBottom: 10, border: "1px solid #c4c2c2" }}>
-                <Grid item container direction="row">
-                    <Grid item xs={3}>
-                        <p style={{ fontSize: 14 }}>Receiving address</p>
-                    </Grid>
-                    <Grid item xs={9} >
-                        <TextField id="standard-basic" value={this.state.toAddress}
-                            onChange={(event) => { this.setState({ toAddress: event.target.value }); }}
-                            style={{ fontSize: 13, color: "#43a047", width: "100%", marginTop: "2%" }}
+            <Grid container direction="column" justify="center" alignItems="center" spacing={3} style={{ height: "25%", width: "80%" }}>
+                <Grid item>
+                    <Paper component="form" variant="outlined" style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        width: 400,
+                    }}>
+                        <Typography style={{ padding: 14, fontSize: 13, width: 100, backgroundColor: "rgba(0, 0, 0, 0.1)", textTransform: 'uppercase', textAlign: 'center' }}>Your address</Typography>
+                        <InputBase
+                            style={{
+                                marginLeft: 10,
+                                flex: 1,
+                            }}
                         />
-                    </Grid>
+                    </Paper>
                 </Grid>
-                <Grid item container direction="row">
-                    <Grid item xs={3} style={{ marginTop: 9 }}>
-                        <MonetizationOnTwoToneIcon style={{ color: '#fcb20d' }}></MonetizationOnTwoToneIcon>
-                    </Grid>
-                    <Grid item xs={9}  >
-                        <TextField id="standard-basic" value={this.state.cost}
-                            type="number"
-                            onChange={(event) => { this.setState({ cost: event.target.value }); }}
-                            style={{ fontSize: 13, color: "#43a047", width: "20%", marginTop: "2%" }}
+                <Grid item>
+                    <Paper component="form" variant="outlined" style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        width: 400,
+                    }}>
+                        <Typography style={{ padding: 14, fontSize: 13, width: 100, backgroundColor: "rgba(0, 0, 0, 0.1)", textTransform: 'uppercase', textAlign: 'center' }}>Your ID</Typography>
+                        <InputBase
+                            style={{
+                                marginLeft: 10,
+                                flex: 1,
+                            }}
                         />
-                    </Grid>
+                    </Paper>
                 </Grid>
-            </Grid>
+            </Grid >
         )
     };
 
     RenderUser(user) {
         return (
-            <Grid container direction="row" alignItems="center" justify="space-between" style={{ borderRadius: 35, padding: "0px 10px 0 15px", margin: "10px 0" }}>
-                <ExpansionPanel style={{ width: "100%", border: "1px solid #c4c2c2" }} alignItems="center" justify="center">
-                    <ExpansionPanelSummary
-                        expandIcon={<ExpandMore />}
-                        aria-controls="panel1a-content"
-                        id="panel1a-header"
-                    >
+            <Card variant="outlined" style={{ width: "22%", margin: '1%', borderRadius: 10, boxShadow: "8px 12px 10px 0px rgba(0, 0, 0, 0.1)" }} >
+                <CardContent>
+                    <Grid container direction="column" justify="center" alignItems="center">
+                        <img style={{ height: 70, width: 70, borderRadius: '50%', objectFit: 'scale-down' }} src={Avatar} alt="avatar" />
                         <Typography>
                             <Grid container direction="row" alignItems="center" style={{ height: "100%" }}>
-                                <AccountCircleIcon style={{ fontSize: 30, color: "#43a047" }} ></AccountCircleIcon>
-                                <p style={{ fontSize: 18, marginLeft: 10 }}>{user.name}</p>
-                                <MonetizationOnTwoToneIcon style={{ marginLeft: 150, color: '#fcb20d' }}></MonetizationOnTwoToneIcon>
-                                <p style={{ fontSize: 17, color: "#43a047" }}> &nbsp;{this.state.MyCoin.getBalanceOfAddress(user.publicKey)}</p>
+                                <p style={{ fontSize: 18, marginLeft: 10, fontWeight: 'bold' }}>{user.name}</p>
                             </Grid>
                         </Typography>
-                    </ExpansionPanelSummary>
-                    <ExpansionPanelDetails>
-                        <Typography style={{ height: "25%", width: "100%" }}>
-                            <Grid container direction="row" spacing={3}>
-                                <Grid item xs={3} >
-                                    <p style={{ fontSize: 14 }}>Private key</p>
-                                </Grid>
-                                <Grid item xs={9} >
-                                    <InputBase eld id="input" defaultValue={user.privateKey}
-                                        disabled={true}
-                                        InputProps={{
-                                            'aria-label': 'naked',
-                                        }}
-                                        style={{ fontSize: 13, color: "#43a047", width: "100%", marginTop: "4%" }}
-                                    />
-                                </Grid>
+                        <Grid item>
+                            <Grid container direction="row" justify="flex-start" alignItems="center">
+                                <Typography style={{ fontSize: 17, color: "#02446F", marginRight: 10 }}> &nbsp;{this.state.MyCoin.getBalanceOfAddress(user.publicKey)}</Typography>
+                                <img style={{ width: 25, height: 25 }} src={Ballot} alt="Ticket" />
                             </Grid>
-                            <Grid item container direction="row">
-                                <Grid item xs={3}>
-                                    <p style={{ fontSize: 14 }}>Public key</p>
-                                </Grid>
-                                <Grid item xs={9} >
-                                    <InputBase id="input" defaultValue={user.publicKey}
-                                        disabled={true}
-                                        InputProps={{
-                                            'aria-label': 'naked',
-                                        }}
-                                        style={{ fontSize: 13, color: "#43a047", width: "100%", marginTop: "4%" }}
-                                    />
-                                </Grid>
-                            </Grid>
-                            <Grid item container direction="row" >
-                                <Grid item xs={5}  >
-                                    <Button variant="contained"
-                                        style={{ width: "100%", height: '57%', borderRadius: 20, background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)", color: "white" }}
-                                        onClick={() => this.handleClickOpenAdd(user.publicKey, user.privateKey)}>
-                                        <p>Send Coin</p>
-                                    </Button>
-                                </Grid>
-                                <Grid item xs={2}></Grid>
-
-                                <Grid item xs={5}>
-                                    <Button variant="contained"
-                                        style={{ width: "100%", height: '57%', borderRadius: 20, background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)", color: "white" }}
-                                        onClick={() => this.handleClickOpen(user.publicKey)}>
-                                        Mine
-                  </Button>
-                                </Grid>
-
-                            </Grid>
-                            <Grid item container direction="row">
-                                <Button variant="contained"
-                                    style={{ width: "100%", height: '5%', borderRadius: 20, background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)", color: "white" }}
-                                    onClick={() => this.getTransHisUser(user.publicKey)}>
-                                    Transactions history
-            </Button>
-                            </Grid>
-                        </Typography>
-                    </ExpansionPanelDetails>
-                </ExpansionPanel>
-            </Grid>
+                        </Grid>
+                    </Grid>
+                </CardContent>
+                <CardActions>
+                    <Grid container direction="row" justify="space-between" alignItems="center">
+                        <Grid item>
+                            <Button style={{ color: "#d4145a" }} onClick={() => this.getTransHisUser(user.publicKey)}>
+                                Detail
+                            </Button>
+                        </Grid>
+                        <Grid item>
+                            <Button style={{ color: "#d4145a" }} onClick={() => this.handleClickOpenAdd(user.publicKey, user.privateKey)}>
+                                Vote
+                            </Button>
+                        </Grid>
+                    </Grid>
+                </CardActions>
+            </Card>
         )
     };
 
@@ -359,7 +321,9 @@ class Home extends React.Component {
 
         return (
             <>
-                {users.map((user, index) => this.RenderUser(user, index))}
+                <Grid container direction="row" alignItems="center" justify="center" style={{ borderRadius: 35, marginBottom: 10 }}>
+                    {users.map((user, index) => this.RenderUser(user, index))}
+                </Grid>
             </>
         );
     };
@@ -420,7 +384,7 @@ class Home extends React.Component {
 
                 <Grid item container direction="row">
                     <Grid item xs={3} style={{ marginTop: 9 }}>
-                        <MonetizationOnTwoToneIcon style={{ color: '#fcb20d' }}></MonetizationOnTwoToneIcon>
+                        <MonetizationOnTwoToneIcon style={{ color: '#fcb20d' }} />
                     </Grid>
                     <Grid item xs={9}  >
                         <p style={{ fontSize: 13, color: "#43a047" }}>{transaction.amount}</p>
@@ -441,15 +405,15 @@ class Home extends React.Component {
     render() {
         return (
             <>
-                <Grid container direction="row" justify="center"
-                    alignItems="flex-start" style={{ padding: "0% 1%" }}>
+                <Grid container direction="row" justify="flex-start"
+                    alignItems="flex-start">
                     <Grid item container direction="column" alignItems="center" style={{ height: "100%", width: "100%", padding: "0% 2.5%", margin: "auto" }}>
-                        <p style={{ fontSize: 30, fontWeight: "700", textAlign: "left", marginLeft: 10 }}>PEERS</p>
+                        <p style={{ fontSize: 30, fontWeight: "bold", textAlign: "left", marginLeft: 10, textTransform: 'uppercase' }}>Candidates</p>
                         {this.renderListUsers()}
                         <Button
                             variant="contained"
                             startIcon={<AddIcon />}
-                            style={{ width: "40%", height: 60, borderRadius: 10, marginTop: 10, background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)", color: "white" }}
+                            style={{ width: 250, borderRadius: 50, height: 60, marginBottom: 10, background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)", color: "white" }}
                             onClick={() => this.AddWallet()}
                         >
                             Add Wallet
@@ -481,30 +445,31 @@ class Home extends React.Component {
                         }
                         <Button onClick={() => this.handleClose()} color="primary" autoFocus>
                             Cancel
-          </Button>
+                    </Button>
                     </DialogActions>
                 </Dialog>
                 <Dialog
                     fullWidth={true}
-                    maxWidth="md"
+                    maxWidth="sm"
                     open={this.state.IsOpenAdd}
                     onClose={this.handleCloseAdd}
                     aria-labelledby="alert-dialog-title"
                     aria-describedby="alert-dialog-description"
 
                 >
-                    <DialogTitle id="alert-dialog-title">Send Coin</DialogTitle>
+                    <DialogTitle id="alert-dialog-title">#Tên ứng cử nhớ sửa nhé</DialogTitle>
                     <DialogContent style={{}}>
                         <DialogContentText id="alert-dialog-description">
-                            {this.renderSendCoin()}
+                            <Grid container justify="center" alignItems="center">
+                                {this.renderSendCoin()}
+                            </Grid>
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={() => this.send()}
-                            color="primary">
-                            Send
+                        <Button onClick={() => this.send()} style={{ color: '#d4145a' }}>
+                            Vote
           </Button>
-                        <Button onClick={() => this.handleCloseAdd()} color="primary" autoFocus>
+                        <Button onClick={() => this.handleCloseAdd()} style={{ color: '#d4145a' }}>
                             Cancel
           </Button>
                     </DialogActions>
