@@ -14,14 +14,18 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  List,
+  ListItemIcon, ListItemText, ListItem
 } from '@material-ui/core';
 import MonetizationOnTwoToneIcon from '@material-ui/icons/MonetizationOnTwoTone';
 import Data from './js/data.json';
 import { reactLocalStorage } from 'reactjs-localstorage';
 import SearchIcon from '@material-ui/icons/Search';
+import HomeIcon from '@material-ui/icons/Home';
+import ViewListIcon from '@material-ui/icons/ViewList';
+import BuildIcon from '@material-ui/icons/Build';
 
 const { Blockchain } = require('../src/js/blockchain');
-
 class App extends React.Component {
   state = {
     MyCoin: {},
@@ -178,7 +182,7 @@ class App extends React.Component {
   render() {
     return (
       <>
-        <AppBar position="static" style={{ flexGrow: 1, backgroundColor: "#43a047" }}>
+        <AppBar style={{ flexGrow: 1, backgroundColor: "#43a047" }}>
           <Toolbar>
             <Typography variant="h6" style={{ flexGrow: 1 }}>
               BLOCK CHAIN
@@ -189,7 +193,8 @@ class App extends React.Component {
                   <TextField fullWidth={true} id="input-with-icon-grid" InputProps={{
                     style: {
                       color: "white",
-                    }
+                    },
+                    
                   }}
                     placeholder="Search transactions of address"
                     onChange={(event) => { this.setState({ searchText: event.target.value }) }} />
@@ -228,25 +233,35 @@ class App extends React.Component {
         </Dialog>
 
         <BrowserRouter>
-          <Grid container direction="row" justify="space-around" alignItems="flex-start">
-            <Grid item xs={3} container direction='column' style={{ marginTop: '1%' }}>
-              <Link to="/" style={{ textDecoration: 'none' }}>
-                <Button variant="container" style={{ width: '40%', fontWeight: 'bold' }}>
-                  HOME
+          <Grid container direction="row" justify="space-around" alignItems="flex-start" style={{marginTop:'4%'}}>
+            <Grid item xs={3} >
+              <div style={{ borderRight: '2px solid #dfe3e8', height: '100%', display: 'flex', flexDirection: 'column', position: 'fixed' }}>
+                <List>
+                  <ListItem>
+                    <Link to="/" style={{ textDecoration: 'none' }}>
+                      <Button variant="container" startIcon={<HomeIcon style={{ marginRight: 10 }} />} style={{ width: '100%', fontWeight: 'bold', fontSize: 20, textAlign: 'left' }}>
+                        HOME
                 </Button>
-              </Link>
-              <Link to={'/a/block'} style={{ textDecoration: 'none' }}>
-                <Button variant="container" style={{ width: '40%', fontWeight: 'bold' }}>
-                  BLOCK
+                    </Link>
+                  </ListItem>
+                  <ListItem>
+                    <Link to={'/a/block'} style={{ textDecoration: 'none', }}>
+                      <Button variant="container" startIcon={<ViewListIcon style={{ marginRight: 10 }} />} style={{ width: '100%', fontWeight: 'bold', fontSize: 20, textAlign: 'left' }}>
+                        BLOCK
                 </Button>
-              </Link>
-              <Link to={'/a/mine'} style={{ textDecoration: 'none' }}>
-                <Button variant="container" style={{ width: '40%', fontWeight: 'bold' }}>
-                  MINE
+                    </Link>
+                  </ListItem>
+                  <ListItem>
+                    <Link to={'/a/mine'} style={{ textDecoration: 'none' }}>
+                      <Button variant="container" startIcon={<BuildIcon style={{ marginRight: 10 }} />} style={{ width: '100%', fontWeight: 'bold', fontSize: 20, textAlign: 'left' }}>
+                        MINE
                 </Button>
-              </Link>
+                    </Link>
+                  </ListItem>
+                </List>
+              </div>
             </Grid>
-            <Grid item xs={8}>
+            <Grid item xs={8} >
               <Routes />
             </Grid>
           </Grid>

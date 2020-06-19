@@ -159,8 +159,8 @@ class Block extends React.Component {
         return (
             <>
                 <Grid container direction="row" justify="center"
-                    alignItems="flex-start" style={{ padding: "1% 2%" }}>
-                    <Grid item container direction="column" style={{ height: "100%", width: "90%", padding: "1.5% 2.5%", margin: "auto" }}>
+                    alignItems="flex-start" style={{ padding: "0% 2%" }}>
+                    <Grid item container direction="column" style={{ height: "100%", width: "90%", padding: "0% 2.5%", margin: "auto" }}>
                         <p style={{ fontSize: 30, fontWeight: "700", textAlign: "center" }}>BLOCK CHAIN</p>
                         {this.renderListBlocks()}
                     </Grid>

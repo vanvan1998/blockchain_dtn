@@ -442,8 +442,8 @@ class Home extends React.Component {
         return (
             <>
                 <Grid container direction="row" justify="center"
-                    alignItems="flex-start" style={{ padding: "1% 2%" }}>
-                    <Grid item container direction="column" alignItems="center" style={{ height: "100%", width: "90%", padding: "1.5% 2.5%", margin: "auto" }}>
+                    alignItems="flex-start" style={{ padding: "0% 1%" }}>
+                    <Grid item container direction="column" alignItems="center" style={{ height: "100%", width: "100%", padding: "0% 2.5%", margin: "auto" }}>
                         <p style={{ fontSize: 30, fontWeight: "700", textAlign: "left", marginLeft: 10 }}>PEERS</p>
                         {this.renderListUsers()}
                         <Button
