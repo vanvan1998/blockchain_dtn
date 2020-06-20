@@ -19,6 +19,7 @@ import MonetizationOnTwoToneIcon from '@material-ui/icons/MonetizationOnTwoTone'
 import AddIcon from '@material-ui/icons/Add';
 import Data from '../js/data.json';
 import User from '../js/user.json';
+import Listcadidates from '../js/listcadidates.json';
 import { ec as EC } from 'elliptic';
 import { reactLocalStorage } from 'reactjs-localstorage';
 import LinearProgress from '@material-ui/core/LinearProgress';
@@ -32,20 +33,20 @@ class Home extends React.Component {
     state = {
         Users: [],
         MyCoin: {},
-        IsOpenMine: false,
         IsOpenAdd: false,
         IsOpenSuccess: false,
         IsOpenTransHis: false,
         transHis: [],
         toAddress: "",
-        cost: 0,
+        // cost: 0,
         fromAddress: "",
         fromPrivatekey: "",
+        id: '',
         note: "",
         titleNote: "",
         mining: false,
         searchText: "",
-        publicKeyMine: ""
+        publicKeyMine: "",
     };
 
     componentWillMount() {
@@ -95,19 +96,33 @@ class Home extends React.Component {
             Users: newUsers,
         });
         reactLocalStorage.set("Users", JSON.stringify(this.state.Users));
-    };
-
-    handleClickOpen = (publicKey) => {
+        console.log('sssssssssssssssssss', this.state.Users);
+        // const tx1 = new Transaction(null, publicKey, 3);
+        // const privateKeyTran = ec.keyFromPrivate(privateKey);
+        // tx1.signTransaction(privateKeyTran);
+        const rewardTx = new Transaction(null, publicKey, 3);
+        this.state.MyCoin.pendingTransactions.push(rewardTx);
+        // const res = this.state.MyCoin.addTransaction(tx1);
+        
         this.setState({
-            IsOpenMine: true,
-            publicKeyMine: publicKey
+            mining: true
         });
-    };
+        setTimeout(() => {
+            const res = this.state.MyCoin.minePendingTransactions();
+            var json = JSON.stringify(this.state.MyCoin);
+            reactLocalStorage.set('Data', json);
+            if (res === 'Block successfully mined!') {
+                this.setState({
+                    IsOpenSuccess: true,
+                    note: 'Add successfull!',
+                    titleNote: "Add ",
+                    mining: false
+                });
+            }
+        }, 500);
 
-    handleClose = () => {
-        this.setState({
-            IsOpenMine: false
-        });
+        var json = JSON.stringify(this.state.MyCoin);
+        reactLocalStorage.set('Data', json);
     };
 
     handleCloseTransHis = () => {
@@ -125,11 +140,10 @@ class Home extends React.Component {
         })
     }
 
-    handleClickOpenAdd = (publicKey, privateKey) => {
+    handleClickOpenAdd = ( name) => {
         this.setState({
-            fromAddress: publicKey,
-            fromPrivatekey: privateKey,
-            IsOpenAdd: true
+            IsOpenAdd: true,
+            toAddress: name
         });
     };
 
@@ -150,15 +164,14 @@ class Home extends React.Component {
             mining: true
         });
         setTimeout(() => {
-            const res = this.state.MyCoin.minePendingTransactions(this.state.publicKeyMine);
+            const res = this.state.MyCoin.minePendingTransactions();
             var json = JSON.stringify(this.state.MyCoin);
             reactLocalStorage.set('Data', json);
             if (res === 'Block successfully mined!') {
                 this.setState({
-                    IsOpenMine: false,
                     IsOpenSuccess: true,
-                    note: res,
-                    titleNote: "Mine",
+                    note: 'Vote successfull!',
+                    titleNote: "Vote",
                     mining: false
                 });
             }
@@ -166,28 +179,29 @@ class Home extends React.Component {
     };
 
     send = () => {
-        const tx1 = new Transaction(this.state.fromAddress, this.state.toAddress, this.state.cost);
+        // thiếu bước xác thực
+        const tx1 = new Transaction(this.state.fromAddress, this.state.toAddress, 1);
         const privateKey = ec.keyFromPrivate(this.state.fromPrivatekey);
         tx1.signTransaction(privateKey);
         const res = this.state.MyCoin.addTransaction(tx1);
         if (res === 'send coin success') {
+            this.mine();
             this.setState({
                 IsOpenAdd: false,
-                IsOpenSuccess: true,
+                // IsOpenSuccess: true,
                 note: "Send coin success!!!",
-                titleNote: "Send coin"
+                // titleNote: "Send coin"
             });
         }
         else {
             this.setState({
-                IsOpenSuccess: true,
+                // IsOpenSuccess: true,
                 note: res,
-                titleNote: "Send coin"
+                // titleNote: "Send coin"
             });
         }
         var json = JSON.stringify(this.state.MyCoin);
         reactLocalStorage.set('Data', json);
-
     };
 
     RenderTransaction(transaction) {
@@ -252,6 +266,23 @@ class Home extends React.Component {
                     }}>
                         <Typography style={{ padding: 14, fontSize: 13, width: 100, backgroundColor: "rgba(0, 0, 0, 0.1)", textTransform: 'uppercase', textAlign: 'center' }}>Your address</Typography>
                         <InputBase
+                            onChange={(event) => { this.setState({ fromAddress: event.target.value }); }}
+                            style={{
+                                marginLeft: 10,
+                                flex: 1,
+                            }}
+                        />
+                    </Paper>
+                </Grid>
+                <Grid item>
+                    <Paper component="form" variant="outlined" style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        width: 400,
+                    }}>
+                        <Typography style={{ padding: 14, fontSize: 13, width: 100, backgroundColor: "rgba(0, 0, 0, 0.1)", textTransform: 'uppercase', textAlign: 'center' }}>Your privateKey</Typography>
+                        <InputBase
+                            onChange={(event) => { this.setState({ fromPrivatekey: event.target.value }); }}
                             style={{
                                 marginLeft: 10,
                                 flex: 1,
@@ -267,6 +298,7 @@ class Home extends React.Component {
                     }}>
                         <Typography style={{ padding: 14, fontSize: 13, width: 100, backgroundColor: "rgba(0, 0, 0, 0.1)", textTransform: 'uppercase', textAlign: 'center' }}>Your ID</Typography>
                         <InputBase
+                            onChange={(event) => { this.setState({ id: event.target.value }); }}
                             style={{
                                 marginLeft: 10,
                                 flex: 1,
@@ -282,14 +314,18 @@ class Home extends React.Component {
         return (
             <Card key={index} variant="outlined" style={{ width: "22%", margin: '1%', borderRadius: 10, boxShadow: "8px 12px 10px 0px rgba(0, 0, 0, 0.1)" }} >
                 <CardContent>
-                    <Grid container direction="column" justify="center" alignItems="center">
-                        <img style={{ height: 70, width: 70, borderRadius: '50%', objectFit: 'scale-down' }} src={Avatar} alt="avatar" />
-                        <Grid container direction="row" alignItems="center" style={{ height: "100%" }}>
-                            <Typography style={{ fontSize: 18, marginLeft: 10, fontWeight: 'bold' }}>{user.name}</Typography>
+                    <Grid container direction="column" justify="center" alignItems="center" spacing={2}>
+                        <Grid item>
+                            <img style={{ height: 70, width: 70, borderRadius: '50%', objectFit: 'scale-down' }} src={Avatar} alt="avatar" />
+                        </Grid>
+                        <Grid item>
+                            <Grid container direction="row" alignItems="center" justify="center" style={{ height: "100%" }}>
+                                <Typography style={{ fontSize: 18, marginLeft: 10, fontWeight: 'bold' }}>{user.name}</Typography>
+                            </Grid>
                         </Grid>
                         <Grid item>
                             <Grid container direction="row" justify="flex-start" alignItems="center">
-                                <Typography style={{ fontSize: 17, color: "#02446F", marginRight: 10 , marginTop: 5}}> &nbsp;{this.state.MyCoin.getBalanceOfAddress(user.publicKey)}</Typography>
+                                <Typography style={{ fontSize: 17, color: "#02446F", marginRight: 10, marginTop: 5 }}> &nbsp;{this.state.MyCoin.getBalanceOfAddress(user.publicKey)}</Typography>
                                 <img style={{ width: 25, height: 25 }} src={Ballot} alt="Ticket" />
                             </Grid>
                         </Grid>
@@ -303,7 +339,7 @@ class Home extends React.Component {
                             </Button>
                         </Grid>
                         <Grid item>
-                            <Button style={{ color: "#d4145a" }} onClick={() => this.handleClickOpenAdd(user.publicKey, user.privateKey)}>
+                            <Button style={{ color: "#d4145a" }} onClick={() => this.handleClickOpenAdd( user.name)}>
                                 Vote
                             </Button>
                         </Grid>
@@ -314,8 +350,7 @@ class Home extends React.Component {
     };
 
     renderListUsers = () => {
-        console.log("btc", this.state.MyCoin);
-        const users = this.state.Users;
+        const users = Listcadidates;
 
         return (
             <>
@@ -420,34 +455,6 @@ class Home extends React.Component {
                 </Grid>
                 <Dialog
                     fullWidth={true}
-                    maxWidth="md"
-                    open={this.state.IsOpenMine}
-                    onClose={this.handleClose}
-                    aria-labelledby="alert-dialog-title"
-                    aria-describedby="alert-dialog-description"
-
-                >
-                    <DialogTitle id="alert-dialog-title">Pending Transaction</DialogTitle>
-                    <DialogContent >
-                        <DialogContentText id="alert-dialog-description">
-                            {this.state.MyCoin.pendingTransactions[0] ?
-                                this.renderListPendingTransactions(this.state.MyCoin.pendingTransactions) : "No transaction pending"}
-                        </DialogContentText>
-                    </DialogContent>
-                    <DialogActions>
-                        {this.state.MyCoin.pendingTransactions[0] ?
-                            (<Button onClick={() => this.mine()}
-                                color="primary">
-                                Mine
-                            </Button>) : null
-                        }
-                        <Button onClick={() => this.handleClose()} color="primary" autoFocus>
-                            Cancel
-                    </Button>
-                    </DialogActions>
-                </Dialog>
-                <Dialog
-                    fullWidth={true}
                     maxWidth="sm"
                     open={this.state.IsOpenAdd}
                     onClose={this.handleCloseAdd}
@@ -455,7 +462,7 @@ class Home extends React.Component {
                     aria-describedby="alert-dialog-description"
 
                 >
-                    <DialogTitle id="alert-dialog-title">#Tên ứng cử nhớ sửa nhé</DialogTitle>
+                    <DialogTitle id="alert-dialog-title">{this.state.toAddress}</DialogTitle>
                     <DialogContent style={{}}>
                         <DialogContentText id="alert-dialog-description">
                             <Grid container justify="center" alignItems="center">
