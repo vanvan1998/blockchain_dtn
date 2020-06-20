@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route , Redirect} from 'react-router-dom';
 import Block from './pages/block';
 import Home from "./pages/home";
-import Mine from "./pages/mine";
+// import Mine from "./pages/mine";
+import Account from "./pages/account";
 
 // Views
 
@@ -10,20 +11,21 @@ export default class Routes extends Component {
     render() {
         return (
             <Switch>
+                <Redirect exact from="/" to="/candidates" />
                 <Route
                     exact
-                    path="/"
+                    path="/candidates"
                     component={Home}
                 />
                 <Route
                     exact
-                    path="/:id/block"
+                    path="/block"
                     component={Block}
                 />
                 <Route
                     exact
-                    path="/:id/mine"
-                    component={Mine}
+                    path="/account"
+                    component={Account}
                 />
             </Switch>
         );

@@ -278,20 +278,18 @@ class Home extends React.Component {
         )
     };
 
-    RenderUser(user) {
+    RenderUser(user, index) {
         return (
-            <Card variant="outlined" style={{ width: "22%", margin: '1%', borderRadius: 10, boxShadow: "8px 12px 10px 0px rgba(0, 0, 0, 0.1)" }} >
+            <Card key={index} variant="outlined" style={{ width: "22%", margin: '1%', borderRadius: 10, boxShadow: "8px 12px 10px 0px rgba(0, 0, 0, 0.1)" }} >
                 <CardContent>
                     <Grid container direction="column" justify="center" alignItems="center">
                         <img style={{ height: 70, width: 70, borderRadius: '50%', objectFit: 'scale-down' }} src={Avatar} alt="avatar" />
-                        <Typography>
-                            <Grid container direction="row" alignItems="center" style={{ height: "100%" }}>
-                                <p style={{ fontSize: 18, marginLeft: 10, fontWeight: 'bold' }}>{user.name}</p>
-                            </Grid>
-                        </Typography>
+                        <Grid container direction="row" alignItems="center" style={{ height: "100%" }}>
+                            <Typography style={{ fontSize: 18, marginLeft: 10, fontWeight: 'bold' }}>{user.name}</Typography>
+                        </Grid>
                         <Grid item>
                             <Grid container direction="row" justify="flex-start" alignItems="center">
-                                <Typography style={{ fontSize: 17, color: "#02446F", marginRight: 10 }}> &nbsp;{this.state.MyCoin.getBalanceOfAddress(user.publicKey)}</Typography>
+                                <Typography style={{ fontSize: 17, color: "#02446F", marginRight: 10 , marginTop: 5}}> &nbsp;{this.state.MyCoin.getBalanceOfAddress(user.publicKey)}</Typography>
                                 <img style={{ width: 25, height: 25 }} src={Ballot} alt="Ticket" />
                             </Grid>
                         </Grid>
@@ -407,8 +405,8 @@ class Home extends React.Component {
             <>
                 <Grid container direction="row" justify="flex-start"
                     alignItems="flex-start">
-                    <Grid item container direction="column" alignItems="center" style={{ height: "100%", width: "100%", padding: "0% 2.5%", margin: "auto" }}>
-                        <p style={{ fontSize: 30, fontWeight: "bold", textAlign: "left", marginLeft: 10, textTransform: 'uppercase' }}>Candidates</p>
+                    <Grid item container direction="column" alignItems="center" style={{ height: "100%", width: "100%", padding: "0% 2.5%", margin: "auto", marginTop: '4%' }}>
+                        <Typography style={{ fontSize: 30, fontWeight: "bold", textAlign: "left", marginLeft: 10, textTransform: 'uppercase' }}>Candidates</Typography>
                         {this.renderListUsers()}
                         <Button
                             variant="contained"
