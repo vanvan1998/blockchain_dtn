@@ -1,6 +1,8 @@
 import React from "react";
 import { BrowserRouter, NavLink } from "react-router-dom";
 import Routes from "./Routes";
+import io from 'socket.io-client';
+import Peer from 'peerjs';
 import {
   Grid,
   Typography,
@@ -142,7 +144,44 @@ class App extends React.Component {
     searchText: ""
   };
 
+  socket = io('http://localhost:4000/');
+  peer = new Peer({
+    config: {
+      'iceServers': [{
+        url: 'stun:stun1.l.google.com:19302'
+      },
+      {
+        url: 'turn:numb.viagenie.ca',
+        credential: 'muazkh',
+        username: 'webrtc@live.com'
+      }
+      ]
+    }
+  });
+  connections = [];
+
+  sendMessage = () => {
+    this.connections.forEach(conn => {
+      conn.send('data');
+    });
+  }
+
   componentWillMount() {
+    this.peer.on('open', function (id) {
+      alert('id: ', id)
+      this.socket.emit('JOIN', id);
+    });
+
+    this.peer.on('connection', function (conn) {
+      alert('connected');
+      // this.connections.push(conn);
+      // this.connections.forEach(conn => {
+      //   conn.on('data', function (data) {
+      //     alert(data);
+      //   });
+      // });
+    });
+
     if (reactLocalStorage.get("Data")) {
       this.setState({
         MyCoin: new Blockchain(JSON.parse(reactLocalStorage.get("Data")))
@@ -153,6 +192,47 @@ class App extends React.Component {
         MyCoin: new Blockchain(Data)
       });
     }
+  }
+
+  conn = null;
+
+  componentDidMount() {
+    this.socket.on('PEERS', peers => {
+      alert(JSON.stringify(peers))
+      peers.forEach(element => {
+        this.conn = this.peer.connect(element.peerId, {
+          reliable: true
+        });
+
+        alert(1)
+
+        this.conn.on('open', function () {
+          alert('connected');
+          this.connections.push(this.conn);
+        });
+
+      });
+    });
+
+    // this.peer.on('disconnected', function () {
+    //   // status.innerHTML = "Connection lost. Please reconnect";
+    //   // console.log('Connection lost. Please reconnect');
+
+    //   // // Workaround for peer.reconnect deleting previous id
+    //   // peer.id = lastPeerId;
+    //   // peer._lastServerId = lastPeerId;
+    //   // peer.reconnect();
+    // });
+
+    // this.peer.on('close', function () {
+    //   // conn = null;
+    //   // status.innerHTML = "Connection destroyed. Please refresh";
+    //   // console.log('Connection destroyed');
+    // });
+
+    // this.peer.on('error', function (err) {
+    //   alert('' + err);
+    // });
   }
 
   handleCloseTransHis = () => {
@@ -431,6 +511,8 @@ class App extends React.Component {
             </Grid>
           </Grid>
         </BrowserRouter>
+
+        <Button onClick={() => { this.sendMessage() }}>aaaaaaaaaaaa</Button>
       </>
     );
   }
