@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Switch, Route , Redirect} from 'react-router-dom';
 import Block from './pages/block';
 import Home from "./pages/home";
-// import Mine from "./pages/mine";
+import CreateAccount from "./pages/createAccount";
 import Account from "./pages/account";
 
 // Views
@@ -26,6 +26,11 @@ export default class Routes extends Component {
                     exact
                     path="/account"
                     component={Account}
+                />
+                <Route
+                    exact
+                    path="/create"
+                    component={CreateAccount}
                 />
             </Switch>
         );

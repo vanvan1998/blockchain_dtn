@@ -22,7 +22,6 @@ import User from '../js/user.json';
 import Listcadidates from '../js/listcadidates.json';
 import { ec as EC } from 'elliptic';
 import { reactLocalStorage } from 'reactjs-localstorage';
-import LinearProgress from '@material-ui/core/LinearProgress';
 import Ballot from '../assets/ballot.png';
 import Avatar from '../assets/avatar-sample.jpg'
 const { Blockchain, Transaction } = require('../../src/js/blockchain');
@@ -44,7 +43,6 @@ class Home extends React.Component {
         id: '',
         note: "",
         titleNote: "",
-        mining: false,
         searchText: "",
         publicKeyMine: "",
     };
@@ -96,7 +94,6 @@ class Home extends React.Component {
             Users: newUsers,
         });
         reactLocalStorage.set("Users", JSON.stringify(this.state.Users));
-        console.log('sssssssssssssssssss', this.state.Users);
         // const tx1 = new Transaction(null, publicKey, 3);
         // const privateKeyTran = ec.keyFromPrivate(privateKey);
         // tx1.signTransaction(privateKeyTran);
@@ -104,9 +101,6 @@ class Home extends React.Component {
         this.state.MyCoin.pendingTransactions.push(rewardTx);
         // const res = this.state.MyCoin.addTransaction(tx1);
         
-        this.setState({
-            mining: true
-        });
         setTimeout(() => {
             const res = this.state.MyCoin.minePendingTransactions();
             var json = JSON.stringify(this.state.MyCoin);
@@ -116,7 +110,6 @@ class Home extends React.Component {
                     IsOpenSuccess: true,
                     note: 'Add successfull!',
                     titleNote: "Add ",
-                    mining: false
                 });
             }
         }, 500);
@@ -160,9 +153,6 @@ class Home extends React.Component {
     };
 
     mine = () => {
-        this.setState({
-            mining: true
-        });
         setTimeout(() => {
             const res = this.state.MyCoin.minePendingTransactions();
             var json = JSON.stringify(this.state.MyCoin);
@@ -172,7 +162,6 @@ class Home extends React.Component {
                     IsOpenSuccess: true,
                     note: 'Vote successfull!',
                     titleNote: "Vote",
-                    mining: false
                 });
             }
         }, 500);
@@ -262,9 +251,9 @@ class Home extends React.Component {
                     <Paper component="form" variant="outlined" style={{
                         display: 'flex',
                         alignItems: 'center',
-                        width: 400,
+                        width: 500,
                     }}>
-                        <Typography style={{ padding: 14, fontSize: 13, width: 100, backgroundColor: "rgba(0, 0, 0, 0.1)", textTransform: 'uppercase', textAlign: 'center' }}>Your address</Typography>
+                        <Typography style={{ padding: 14, fontSize: 13, width: 150, backgroundColor: "rgba(0, 0, 0, 0.1)", textTransform: 'uppercase', textAlign: 'center' }}>Your public key</Typography>
                         <InputBase
                             onChange={(event) => { this.setState({ fromAddress: event.target.value }); }}
                             style={{
@@ -278,9 +267,9 @@ class Home extends React.Component {
                     <Paper component="form" variant="outlined" style={{
                         display: 'flex',
                         alignItems: 'center',
-                        width: 400,
+                        width: 500,
                     }}>
-                        <Typography style={{ padding: 14, fontSize: 13, width: 100, backgroundColor: "rgba(0, 0, 0, 0.1)", textTransform: 'uppercase', textAlign: 'center' }}>Your privateKey</Typography>
+                        <Typography style={{ padding: 14, fontSize: 13, width: 150, backgroundColor: "rgba(0, 0, 0, 0.1)", textTransform: 'uppercase', textAlign: 'center' }}>Your private Key</Typography>
                         <InputBase
                             onChange={(event) => { this.setState({ fromPrivatekey: event.target.value }); }}
                             style={{
@@ -294,9 +283,9 @@ class Home extends React.Component {
                     <Paper component="form" variant="outlined" style={{
                         display: 'flex',
                         alignItems: 'center',
-                        width: 400,
+                        width: 500,
                     }}>
-                        <Typography style={{ padding: 14, fontSize: 13, width: 100, backgroundColor: "rgba(0, 0, 0, 0.1)", textTransform: 'uppercase', textAlign: 'center' }}>Your ID</Typography>
+                        <Typography style={{ padding: 14, fontSize: 13, width: 150, backgroundColor: "rgba(0, 0, 0, 0.1)", textTransform: 'uppercase', textAlign: 'center' }}>Your ID</Typography>
                         <InputBase
                             onChange={(event) => { this.setState({ id: event.target.value }); }}
                             style={{
@@ -357,15 +346,6 @@ class Home extends React.Component {
                 <Grid container direction="row" alignItems="center" justify="center" style={{ borderRadius: 35, marginBottom: 10 }}>
                     {users.map((user, index) => this.RenderUser(user, index))}
                 </Grid>
-            </>
-        );
-    };
-
-    renderListPendingTransactions = (trans) => {
-        return (
-            <>
-                {trans.map((tran, index) => this.RenderTransaction(tran))}
-                {this.state.mining ? <LinearProgress color="secondary" /> : null}
             </>
         );
     };

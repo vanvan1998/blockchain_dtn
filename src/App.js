@@ -81,7 +81,7 @@ const Sidebar = withStyles(styles)(props => {
         height: window.innerHeight * 0.91
       }}
     >
-      <List style={{ width: "100%",  marginTop: '8%', }}>
+      <List style={{ width: "100%", marginTop: '8%', }}>
         <ListItem
           activeClassName={classes.activeListItem}
           className={classes.listItem}
@@ -98,6 +98,7 @@ const Sidebar = withStyles(styles)(props => {
         </ListItem>
         <ListItem
           activeClassName={classes.activeListItem}
+          className={classes.listItem}
           component={NavLink}
           to="/block"
         >
@@ -112,6 +113,7 @@ const Sidebar = withStyles(styles)(props => {
 
         <ListItem
           activeClassName={classes.activeListItem}
+          className={classes.listItem}
           component={NavLink}
           to="/account"
         >
@@ -291,28 +293,28 @@ class App extends React.Component {
             </Grid>
           </Grid>
         ) : (
-          <Grid item container direction="row">
-            <Grid item xs={3}>
-              <p style={{ fontSize: 17, fontWeight: 900 }}>Receive from :</p>
+            <Grid item container direction="row">
+              <Grid item xs={3}>
+                <p style={{ fontSize: 17, fontWeight: 900 }}>Receive from :</p>
+              </Grid>
+              <Grid item xs={9}>
+                <InputBase
+                  id="input"
+                  defaultValue={transaction.fromAddress}
+                  disabled={true}
+                  InputProps={{
+                    "aria-label": "naked"
+                  }}
+                  style={{
+                    fontSize: 13,
+                    color: "#43a047",
+                    width: "100%",
+                    marginTop: "2%"
+                  }}
+                />
+              </Grid>
             </Grid>
-            <Grid item xs={9}>
-              <InputBase
-                id="input"
-                defaultValue={transaction.fromAddress}
-                disabled={true}
-                InputProps={{
-                  "aria-label": "naked"
-                }}
-                style={{
-                  fontSize: 13,
-                  color: "#43a047",
-                  width: "100%",
-                  marginTop: "2%"
-                }}
-              />
-            </Grid>
-          </Grid>
-        )}
+          )}
 
         <Grid item container direction="row">
           <Grid item xs={3} style={{ marginTop: 9 }}>
@@ -397,8 +399,8 @@ class App extends React.Component {
             <DialogContentText id="alert-dialog-description">
               {this.state.transHis[0]
                 ? this.state.transHis.map((tran, index) =>
-                    this.RenderTransactionHis(tran, this.state.searchText)
-                  )
+                  this.RenderTransactionHis(tran, this.state.searchText)
+                )
                 : "No transactions history"}
             </DialogContentText>
           </DialogContent>
