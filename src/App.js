@@ -144,7 +144,7 @@ class App extends React.Component {
     searchText: ""
   };
 
-  socket = io('http://localhost:4000/');
+  socket = io('https://fathomless-beyond-85161.herokuapp.com/');
   peer = new Peer({
     config: {
       'iceServers': [{
@@ -167,12 +167,11 @@ class App extends React.Component {
   }
 
   componentWillMount() {
-    this.peer.on('open', function (id) {
-      alert('id: ', id)
+    this.peer.on('open', (id) => {
       this.socket.emit('JOIN', id);
     });
 
-    this.peer.on('connection', function (conn) {
+    this.peer.on('connection', (conn) => {
       alert('connected');
       // this.connections.push(conn);
       // this.connections.forEach(conn => {
@@ -194,21 +193,18 @@ class App extends React.Component {
     }
   }
 
-  conn = null;
-
   componentDidMount() {
     this.socket.on('PEERS', peers => {
-      alert(JSON.stringify(peers))
+      alert(JSON.stringify(peers));
+
       peers.forEach(element => {
-        this.conn = this.peer.connect(element.peerId, {
+        const conn = this.peer.connect(element.peerId, {
           reliable: true
         });
 
-        alert(1)
-
-        this.conn.on('open', function () {
+        conn.on('open', function () {
           alert('connected');
-          this.connections.push(this.conn);
+          this.connections.push(conn);
         });
 
       });
