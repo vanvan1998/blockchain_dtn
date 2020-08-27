@@ -23,7 +23,7 @@ import Data from '../js/data.json';
 import User from '../js/user.json';
 import Listcadidates from '../js/listcadidates.json';
 import { ec as EC } from 'elliptic';
-
+import {Link} from 'react-router-dom';
 const { Blockchain, Transaction } = require('../../src/js/blockchain');
 const ec = new EC('secp256k1');
 
@@ -307,7 +307,7 @@ class Account extends React.Component {
                     style={{
                       padding: 14,
                       fontSize: 13,
-                      width: 150,
+                      width: 120,
                       backgroundColor: "rgba(0, 0, 0, 0.1)",
                       textTransform: "uppercase",
                       textAlign: "center"
@@ -338,7 +338,7 @@ class Account extends React.Component {
                     style={{
                       padding: 14,
                       fontSize: 13,
-                      width: 150,
+                      width: 120,
                       backgroundColor: "rgba(0, 0, 0, 0.1)",
                       textTransform: "uppercase",
                       textAlign: "center"
@@ -369,7 +369,7 @@ class Account extends React.Component {
                     style={{
                       padding: 14,
                       fontSize: 13,
-                      width: 150,
+                      width: 120,
                       backgroundColor: "rgba(0, 0, 0, 0.1)",
                       textTransform: "uppercase",
                       textAlign: "center"
@@ -399,6 +399,11 @@ class Account extends React.Component {
                 >
                   Verify account
               </Button>
+              </Grid>
+              <Grid item style={{ marginBottom: 20 }}>
+                <Link to="/account/create" style={{textDecoration: 'none'}}>
+                  <Typography style={{fontSize: 13, color: '#dd2476'}} >If you don't have account. Let's create now !</Typography>
+                </Link>
               </Grid>
             </>
           )}

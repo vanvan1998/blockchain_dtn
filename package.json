@@ -10,12 +10,16 @@
     "@testing-library/user-event": "^7.1.2",
     "browserify-fs": "^1.0.0",
     "crypto-js": "^4.0.0",
+    "elliptic": "latest",
+    "material-ui-popup-state": "^1.5.4",
+    "peer": "^0.5.3",
+    "peerjs": "^1.2.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
     "reactjs-localstorage": "^1.0.1",
-    "elliptic": "latest"
+    "socket.io-client": "^2.3.0"
   },
   "scripts": {
     "start": "react-scripts start",

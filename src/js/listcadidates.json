@@ -1,10 +1,22 @@
 [
     {
-        "name": "Wallet1",
-        "publicKey": "Wallet1"
+        "name": "Nguyễn Sĩ Văn",
+        "publicKey": "Nguyễn Sĩ Văn",
+        "avatar": "/images/van.jpg"
     },
     {
-        "name": "Wallet2",
-        "publicKey": "Wallet2"
+        "name": "Đặng Thanh Tuấn",
+        "publicKey": "Đặng Thanh Tuấn",
+        "avatar": "/images/tuan.jpg"
+    },
+    {
+        "name": "Nguyễn Thị Bích Vân",
+        "publicKey": "Nguyễn Thị Bích Vân",
+        "avatar": "/images/vanbich.jpg"
+    },
+    {
+        "name": "Vũ Duy Khánh",
+        "publicKey": "Vũ Duy Khánh",
+        "avatar": "/images/khanh.jpg"
     }
 ]

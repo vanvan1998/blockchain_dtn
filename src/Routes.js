@@ -29,7 +29,7 @@ export default class Routes extends Component {
                 />
                 <Route
                     exact
-                    path="/create"
+                    path="/account/create"
                     component={CreateAccount}
                 />
             </Switch>

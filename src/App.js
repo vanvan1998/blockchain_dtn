@@ -1,6 +1,8 @@
 import React from "react";
 import { BrowserRouter, NavLink } from "react-router-dom";
 import Routes from "./Routes";
+import io from 'socket.io-client';
+import Peer from 'peerjs';
 import {
   Grid,
   Typography,
@@ -129,6 +131,7 @@ const Sidebar = withStyles(styles)(props => {
     </Grid>
   );
 });
+
 class App extends React.Component {
   state = {
     MyCoin: {},
@@ -142,7 +145,38 @@ class App extends React.Component {
     searchText: ""
   };
 
+  socket = io('https://fathomless-beyond-85161.herokuapp.com/');
+
+  peer = new Peer({
+    config: {
+      'iceServers': [{
+        url: 'stun:stun1.l.google.com:19302'
+      },
+      {
+        url: 'turn:numb.viagenie.ca',
+        credential: 'muazkh',
+        username: 'webrtc@live.com'
+      }
+      ]
+    }
+  });
+
+  connections = [];
+  connection = null;
+
+  sendMessage = () => {
+    console.log(this.connections)
+    this.connections.forEach((conn, index) => {
+        conn.send('send all');
+    })
+  }
+
   componentWillMount() {
+    this.peer.on('open', (id) => {
+      console.log(id);
+      this.socket.emit('JOIN', id);
+    });
+
     if (reactLocalStorage.get("Data")) {
       this.setState({
         MyCoin: new Blockchain(JSON.parse(reactLocalStorage.get("Data")))
@@ -153,6 +187,41 @@ class App extends React.Component {
         MyCoin: new Blockchain(Data)
       });
     }
+  }
+
+  componentDidMount() {
+    this.socket.on('PEERS', peers => {
+      peers.forEach((item, index) => {
+        //console.log(index, item.peerId);
+
+        const conn = this.peer.connect(item.peerId);
+        conn.on('open', () => {
+          conn.send('hi!');
+        });
+
+        conn.on('data', (data) => {
+          console.log(data);
+        });
+
+        this.connections.push(conn);
+      })
+    })
+
+    this.peer.on('connection', (conn) => {
+      this.connection = conn;
+
+      this.connection.on('data', (data) => {
+        console.log(data);
+      });
+
+      this.connection.on('open', () => {
+        this.connection.send('hello!');
+      });
+    });
+
+    // this.peer.on('error', function (err) {
+    //   alert('Không thể connect, vui lòng refresh!');
+    // });
   }
 
   handleCloseTransHis = () => {
@@ -431,6 +500,8 @@ class App extends React.Component {
             </Grid>
           </Grid>
         </BrowserRouter>
+
+        <Button onClick={() => { this.sendMessage() }}>Join</Button>
       </>
     );
   }
