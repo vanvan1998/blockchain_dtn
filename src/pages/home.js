@@ -16,7 +16,6 @@ import {
     Paper,
 } from '@material-ui/core';
 import MonetizationOnTwoToneIcon from '@material-ui/icons/MonetizationOnTwoTone';
-import AddIcon from '@material-ui/icons/Add';
 import Data from '../js/data.json';
 import User from '../js/user.json';
 import Listcadidates from '../js/listcadidates.json';
@@ -80,6 +79,16 @@ class Home extends React.Component {
         }
     };
 
+    componentDidMount() {
+        setInterval(() => {
+            if (JSON.stringify(this.state.MyCoin) !== reactLocalStorage.get("Data")) {
+                this.setState({
+                    MyCoin: new Blockchain(JSON.parse(reactLocalStorage.get("Data")))
+                })
+            }
+        }, 500)
+    }
+
     AddWallet = () => {
         const key = ec.genKeyPair();
         const privateKey = key.getPrivate('hex');
@@ -100,7 +109,7 @@ class Home extends React.Component {
         const rewardTx = new Transaction(null, publicKey, 3);
         this.state.MyCoin.pendingTransactions.push(rewardTx);
         // const res = this.state.MyCoin.addTransaction(tx1);
-        
+
         setTimeout(() => {
             const res = this.state.MyCoin.minePendingTransactions();
             var json = JSON.stringify(this.state.MyCoin);
@@ -133,7 +142,7 @@ class Home extends React.Component {
         })
     }
 
-    handleClickOpenAdd = ( name) => {
+    handleClickOpenAdd = (name) => {
         this.setState({
             IsOpenAdd: true,
             toAddress: name
@@ -181,6 +190,7 @@ class Home extends React.Component {
                 note: "Send coin success!!!",
                 // titleNote: "Send coin"
             });
+            reactLocalStorage.set("isVoted", true);
         }
         else {
             this.setState({
@@ -328,7 +338,7 @@ class Home extends React.Component {
                             </Button>
                         </Grid>
                         <Grid item>
-                            <Button style={{ color: "#d4145a" }} onClick={() => this.handleClickOpenAdd( user.name)}>
+                            <Button style={{ color: "#d4145a" }} onClick={() => this.handleClickOpenAdd(user.name)}>
                                 Vote
                             </Button>
                         </Grid>
@@ -423,14 +433,6 @@ class Home extends React.Component {
                     <Grid item container direction="column" alignItems="center" style={{ height: "100%", width: "100%", padding: "0% 2.5%", margin: "auto", marginTop: '4%' }}>
                         <Typography style={{ fontSize: 30, fontWeight: "bold", textAlign: "left", marginLeft: 10, textTransform: 'uppercase' }}>Candidates</Typography>
                         {this.renderListUsers()}
-                        <Button
-                            variant="contained"
-                            startIcon={<AddIcon />}
-                            style={{ width: 250, borderRadius: 50, height: 60, marginBottom: 10, background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)", color: "white" }}
-                            onClick={() => this.AddWallet()}
-                        >
-                            Add Wallet
-                            </Button>
                     </Grid>
                 </Grid>
                 <Dialog

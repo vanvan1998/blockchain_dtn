@@ -130,6 +130,7 @@ class Account extends React.Component {
     const res = this.state.MyCoin.addTransaction(tx1);
     if (res === 'send coin success') {
       this.mine();
+      reactLocalStorage.set("isVoted", true);
     }
     else {
       this.setState({

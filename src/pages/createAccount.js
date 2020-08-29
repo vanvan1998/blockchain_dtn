@@ -4,16 +4,19 @@ import {
   Typography,
   Button,
   InputBase,
+  IconButton,
   Paper,
   Card,
 } from "@material-ui/core";
+import { Link } from "react-router-dom";
 import { reactLocalStorage } from "reactjs-localstorage";
+import FileCopyIcon from '@material-ui/icons/FileCopy';
 import Data from "../js/data.json";
 import User from "../js/user.json";
 import Popover from "@material-ui/core/Popover";
 import PopupState, { bindTrigger, bindPopover } from "material-ui-popup-state";
 import Box from "@material-ui/core/Box";
-
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { ec as EC } from "elliptic";
 const { Blockchain, Transaction } = require("../../src/js/blockchain");
 const ec = new EC("secp256k1");
@@ -69,7 +72,8 @@ class Account extends React.Component {
     Users: [],
     MyCoin: {},
     publicKey: "",
-    privateKey: ""
+    privateKey: "",
+    copied: false,
   };
 
   componentWillMount() {
@@ -189,7 +193,8 @@ class Account extends React.Component {
                 direction="row"
                 alignItems="center"
                 justify="center"
-                style={{ width: 500 , height: 100}}
+                spacing={2}
+                style={{ width: 500, height: 200 }}
               >
                 <Grid item xs={12}>
                   <Grid
@@ -212,41 +217,75 @@ class Account extends React.Component {
                 </Grid>
                 <Grid item xs={12}>
                   <Grid
-                      container
-                      direction="row"
-                      alignItems="center"
-                      justify="space-around"
+                    container
+                    direction="row"
+                    alignItems="center"
+                    justify="space-around"
                   >
-                  <Typography
-                    style={{
-                      fontSize: 12,
-                      color: "#000",
-                      textTransform: "uppercase"
-                    }}
-                  >
-                    Public key
+                    <Typography
+                      style={{
+                        fontSize: 12,
+                        color: "#000",
+                        textTransform: "uppercase"
+                      }}
+                    >
+                      Public key
                   </Typography>
-                  <PopupValue value={this.state.publicKey} />
+                    <PopupValue value={this.state.publicKey} />
                   </Grid>
+                </Grid>
+                <Grid item xs={12}>
+                  <Grid
+                    container
+                    direction="row"
+                    alignItems="center"
+                    justify="center"
+                    style={{ width: 570 }}>
+                    <CopyToClipboard text={`Private key: ${this.state.privateKey}\nPublic key: ${this.state.publicKey}\nID: ${this.state.id}`}
+                      onCopy={() => this.setState({ copied: true })}>
+                      <IconButton style={{ color: "#dd2476" }}>
+                        <FileCopyIcon />
+                      </IconButton>
+                    </CopyToClipboard>
+                    {this.state.copied ? <span style={{ color: 'green', fontSize: 12 }}>Copied</span> : null}
+                  </Grid>
+
                 </Grid>
               </Grid>
             </Card>
-            <Typography style={{fontSize: 13, color: '#dd2476'}}>You have to remember your private key and public key above because you use it to vote for anyone</Typography>
+            <Typography style={{ fontSize: 13, color: '#dd2476' }}>You have to remember your private key and public key above because you use it to vote for anyone</Typography>
           </Grid>
         )}
         <Grid item style={{ marginBottom: 20 }}>
-          <Button
-            onClick={() => this.AddWallet()}
-            style={{
-              background:
-                "-webkit-gradient(linear,left top,right top,from(#dd2476),to(#ff512f))",
-              color: "#fff",
-              borderRadius: 50,
-              width: 150
-            }}
-          >
-            Đăng ký
-          </Button>
+          {this.state.publicKey && this.state.privateKey ? (
+            <Link to="/account" style={{ textDecoration: "none" }}>
+              <Button
+                style={{
+                  background:
+                    "-webkit-gradient(linear,left top,right top,from(#dd2476),to(#ff512f))",
+                  color: "#fff",
+                  borderRadius: 50,
+                  width: "auto"
+                }}
+              >
+                REMIND YOUR ACCOUNT AND LET'S VOTING!
+            </Button>
+            </Link>
+
+          ) : (
+              <Button
+                onClick={() => this.AddWallet()}
+                style={{
+                  background:
+                    "-webkit-gradient(linear,left top,right top,from(#dd2476),to(#ff512f))",
+                  color: "#fff",
+                  borderRadius: 50,
+                  width: 200
+                }}
+              >
+                REGISTER ACCOUNT
+              </Button>)}
+
         </Grid>
       </Grid>
     );

@@ -165,9 +165,8 @@ class App extends React.Component {
   connection = null;
 
   sendMessage = () => {
-    console.log(this.connections)
     this.connections.forEach((conn, index) => {
-        conn.send('send all');
+      conn.send(reactLocalStorage.get("Data"));
     })
   }
 
@@ -196,11 +195,16 @@ class App extends React.Component {
 
         const conn = this.peer.connect(item.peerId);
         conn.on('open', () => {
-          conn.send('hi!');
+          conn.send('getData');
         });
 
         conn.on('data', (data) => {
-          console.log(data);
+          if (JSON.parse(data).chain.length < JSON.parse(reactLocalStorage.get("Data")).chain.length) {
+            reactLocalStorage.set("isVoted", true);
+          }
+          else {
+            reactLocalStorage.set("Data", data);
+          }
         });
 
         this.connections.push(conn);
@@ -208,20 +212,35 @@ class App extends React.Component {
     })
 
     this.peer.on('connection', (conn) => {
+
       this.connection = conn;
+      this.connections.push(conn);
 
       this.connection.on('data', (data) => {
-        console.log(data);
+        if (data !== "getData") {
+          if (JSON.parse(data).chain.length < JSON.parse(reactLocalStorage.get("Data")).chain.length) {
+            reactLocalStorage.set("isVoted", true);
+          }
+          else {
+            reactLocalStorage.set("Data", data);
+          }
+        }
       });
-
       this.connection.on('open', () => {
-        this.connection.send('hello!');
+        this.connection.send(reactLocalStorage.get("Data"));
       });
     });
 
     // this.peer.on('error', function (err) {
     //   alert('Không thể connect, vui lòng refresh!');
     // });
+
+    setInterval(() => {
+      if (reactLocalStorage.get("isVoted") === "true") {
+        this.sendMessage();
+        reactLocalStorage.set("isVoted", false);
+      }
+    }, 500)
   }
 
   handleCloseTransHis = () => {
@@ -500,8 +519,6 @@ class App extends React.Component {
             </Grid>
           </Grid>
         </BrowserRouter>
-
-        <Button onClick={() => { this.sendMessage() }}>Join</Button>
       </>
     );
   }
